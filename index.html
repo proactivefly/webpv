@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src='./bjevpv.min.js'></script>
+</head>
+<body>
+	<h1>hello</h1>
+	<a href="jump.html" id='aa'>页面跳转</a>
+	<a href="#" onclick='ss()'>统计点击pv</a>
+	<script>
+		var pv=new BJEVPV({'pf':2,'page':'index'})
+		function ss(){
+			pv.clickPv('goEvent',10086)
+		}
+	</script>
+</body>
+</html>
