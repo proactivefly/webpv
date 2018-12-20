@@ -8,11 +8,23 @@
 <body>
 	<h1>hello</h1>
 	<a href="jump.html" id='aa'>页面跳转</a>
+	<hr>
 	<a href="#" onclick='ss()'>统计点击pv</a>
+	<hr>
+	<a href="#" onclick='aa()'>单页应用需要在页面销毁时主动触发时间统计</a>
 	<script>
-		var pv=new BJEVPV({'pf':2,'page':'index'})
+		var pv=new BJEVPV({
+			pf:2,
+			page:'index',
+			uid:1009,//非必传
+			isSPA:true//是否单页应用
+		})
 		function ss(){
-			pv.clickPv('goEvent',10086)
+			pv.stPv('click_banner') //如果传第二个参数会覆盖初始化的uid
+		}
+
+		function aa(){
+			pv.stTime()
 		}
 	</script>
 </body>

@@ -10,21 +10,24 @@ function BJEVPV(pvObj){
 	};
   this.pf=pvObj.pf;
   this.page=pvObj.page;
-  this.init()
+  this.uid=pvObj.uid?pvObj.uid:0;
+  this.isSPA=pvObj.isSPA;// 0不是单页应用，1是单页应用
+  this.pageStart=new Date().getTime();
+  !this.isSPA && this.init();
 }	
 BJEVPV.prototype.init=function(){
-	this.pageStayTime()
+  this.aotoStTime()
 };
 BJEVPV.prototype.pv=function(log){
   var _params = '';
   for (var key in log) {
       _params += '&' + key + '=' + log[key]
   };
-  var domainArr = ['xxx.xxx.com']; //换成自己的域名
+  var domainArr = ['dataimage.xxx.com'];
   var k = Math.floor(Math.random() * domainArr.length); //向下取整 0
   var _protocol='';
   if(location.protocol=='file:'){_protocol='http:'};
-  var domon_url = _protocol+"//"+domainArr[k]+"/smallpic/";//注意修改二级路径  
+  var domon_url = _protocol+"//"+domainArr[k]+"/smallpic/";
   var im = "i_" + Math.floor(2147483648 * Math.random()).toString(36);
   var imgArr = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "w", "v", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
   var n = Math.floor(Math.random() * imgArr.length + 1) - 1;//0-35 的整数
@@ -39,23 +42,32 @@ BJEVPV.prototype.pv=function(log){
   };
   window[im].src = url
 };
-BJEVPV.prototype.clickPv=function(click_key,uid){
-	if(!click_key){
+BJEVPV.prototype.stPv=function(pv_key,uid){
+	if(!pv_key){
 		throw new Error('missing parameter and type is String');
 	};
   var _obj = {
   	'pf':this.pf,
     'page': this.page,
-    'pvtype':click_key,
-    'uid':uid,
+    'pvtype':pv_key,
+    'uid':uid?uid:this.uid,
     'durtime':0
-  };
-  if(!uid){
-  	_obj.uid=0
   };
   this.pv(_obj)
 };
-BJEVPV.prototype.pageStayTime=function(pageStartTime){
+BJEVPV.prototype.stTime=function(){
+  var pageEndTime = new Date().getTime();
+  var pageStayTime =pageEndTime - this.pageStart ;
+  var _page_params = {
+    'pf':this.pf,
+    'page': this.page,
+    'pvtype':0,
+    'uid':this.uid,
+    'durtime':pageStayTime
+  };
+  this.pv(_page_params)
+};
+BJEVPV.prototype.aotoStTime=function(pageStartTime){
 	var pageStartTime=new Date().getTime();
   window.onbeforeunload = function(event) {
       var pageEndTime = new Date().getTime();
@@ -64,7 +76,7 @@ BJEVPV.prototype.pageStayTime=function(pageStartTime){
       	'pf':this.pf,
         'page': this.page,
         'pvtype':0,
-        'uid':0,
+        'uid':this.uid,
         'durtime':pageStayTime
       };
       this.pv(_page_params)
